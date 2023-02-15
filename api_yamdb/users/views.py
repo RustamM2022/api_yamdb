@@ -45,17 +45,13 @@ def user_profile(self, request):
     return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
 
-class SignupViewSet(
-    mixins.CreateModelMixin,
-    mixins.ListModelMixin,
-    viewsets.GenericViewSet
-):
+class SignupViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserCreateSerializer
     permission_classes = (permissions.AllowAny,)
 
     def create(self, request):
-        serializer = UserSerializer(request.user)
+        serializer = UserSerializer(request.data)
         serializer.is_valid(raise_exception=True)
         user = User.objects.get_or_create(**serializer.validated_data)
         confirmation_token = default_token_generator.make_token(user)

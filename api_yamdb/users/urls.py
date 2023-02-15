@@ -7,7 +7,7 @@ from rest_framework_simplejwt.views import (
     TokenVerifyView,
 )
 
-router = routers.DefaultRouter()
+router = routers.SimpleRouter()
 
 router.register(r'users', UsersViewSet)
 urlpatterns = [
@@ -21,7 +21,7 @@ urlpatterns = [
         'auth/token/verify/', TokenVerifyView.as_view(),
         name='token_verify'),
     path(
-        'auth/signup/', SignupViewSet.as_view({'get': 'list'}),
+        'auth/signup/', SignupViewSet.as_view({'post': 'create'}),
         name='signup'),
     path('', include(router.urls))
 ]
