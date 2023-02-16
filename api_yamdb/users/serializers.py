@@ -21,8 +21,13 @@ class UserSerializer(serializers.ModelSerializer):
         return data
 
 
-class UserCreateSerializer(serializers.ModelSerializer):
+class SignupSerializer(serializers.ModelSerializer):
 
     class Meta:
         fields = ('username', 'email')
         model = User
+        validators = [UniqueTogetherValidator(
+            queryset=User.objects.all(),
+            fields=('username', 'email')
+        )
+        ]

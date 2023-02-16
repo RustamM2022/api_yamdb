@@ -12,14 +12,16 @@ Roles = (
 
 
 class User(AbstractUser):
+    first_name = models.CharField(('first name'), max_length=150, blank=True)
+    last_name = models.CharField(('last name'), max_length=150, blank=True)
     bio = models.TextField(
         verbose_name='Биография',
         blank=True,
     )
     email = models.EmailField(
         verbose_name='Почта',
-        blank=True,
         max_length=254,
+        unique=True,
     )
     role = models.CharField(
         verbose_name='Роль',
