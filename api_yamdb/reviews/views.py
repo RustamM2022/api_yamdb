@@ -1,7 +1,7 @@
 from django.shortcuts import get_object_or_404
 
 from .serializers import CommentSerializer,ReviewSerializer
-from откуда-то.permissions import 'авторпользовательадминчтение'
+from api.permissions import IsSuperUserIsAdminIsModeratorIsAuthor
 
 from reviews.models import Review, Title
 from users.models import User 
@@ -9,7 +9,7 @@ from users.models import User
 
 class ReviewViewSet(viewsets.ModelViewSet):
     serializer_class = ReviewSerializer
-    permission_classes = ('авторпользовательадминчтение',)
+    permission_classes = (IsSuperUserIsAdminIsModeratorIsAuthor,)
 
     def get_title(self):
         return get_object_or_404(Title, id=self.kwargs.get('title.id'))
@@ -23,7 +23,7 @@ class ReviewViewSet(viewsets.ModelViewSet):
 
 class CommentViewSet(viewsets.ModelViewSet):
     serializer_class = CommentSerializer
-    permission_classes = ('авторпользовательадминчтение',)
+    permission_classes = (IsSuperUserIsAdminIsModeratorIsAuthor,)
 
     # вернет отзыв
     def get_review(self):
