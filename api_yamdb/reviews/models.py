@@ -86,7 +86,7 @@ class Review(models.Model):
     )
     score = models.IntegerField(
         'Рейтинг',
-        default = '1',
+        default='1',
         validators=[
             MinValueValidator(limit_value=1,
                               message='Минимальный рейтинг - 1'),
@@ -103,10 +103,10 @@ class Review(models.Model):
 
 
 class Comments(models.Model):
-    text = text = models.TextField(
-        'Текст комментария',
+    text = models.TextField(
+        # 'Текст комментария',
         help_text='Введите текст комментария',
-        verbose_name = 'Комментарий'
+        verbose_name='Комментарий'
     )
     pub_date = models.DateTimeField('Дата публикации', auto_now_add=True)
     author = models.ForeignKey(
