@@ -23,10 +23,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-<<<<<<< HEAD
-=======
     'users.apps.UsersConfig',
->>>>>>> 7469c9edc63157c1157756acfab05280127429ce
     'rest_framework',
     'rest_framework_simplejwt',
 ]
