@@ -1,6 +1,6 @@
 from django.shortcuts import get_object_or_404
 
-from .serializers import CommentSerializer,ReviewSerializer
+from .serializers import CommentSerializer, ReviewSerializer
 from api.permissions import IsSuperUserIsAdminIsModeratorIsAuthor
 
 from reviews.models import Review, Title
