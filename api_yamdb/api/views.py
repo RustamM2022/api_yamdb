@@ -6,7 +6,7 @@ from reviews.models import Category, Genre, Title
 
 from .filters import TitleFilter
 from .mixins import CreateListDestroyViewSet
-from .permissions import (
+from users.permissions import (
     AnonimReadOnly,
     IsSuperUserOrIsAdminOnly
 )
