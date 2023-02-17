@@ -1,8 +1,7 @@
 from django.db.models import Avg
-from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import viewsets
-
+from rest_framework import viewsets, filters
 from reviews.models import Category, Genre, Title
+from django_filters.rest_framework import DjangoFilterBackend
 
 from .filters import TitleFilter
 from .mixins import CreateListDestroyViewSet
@@ -13,6 +12,7 @@ from users.permissions import (
 from .serializers import (
     CategorySerializer, GenreSerializer,
     TitleGETSerializer, TitleSerializer)
+from rest_framework.pagination import PageNumberPagination
 
 
 class CategoryViewSet(CreateListDestroyViewSet):
@@ -20,6 +20,7 @@ class CategoryViewSet(CreateListDestroyViewSet):
 
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
+    pagination_class = PageNumberPagination
 
 
 class GenreViewSet(CreateListDestroyViewSet):
@@ -27,6 +28,9 @@ class GenreViewSet(CreateListDestroyViewSet):
 
     queryset = Genre.objects.all()
     serializer_class = GenreSerializer
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ('name',)
+    lookup_field = 'slug'
 
 
 class TitleViewSet(viewsets.ModelViewSet):
