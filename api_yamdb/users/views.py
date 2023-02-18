@@ -50,27 +50,63 @@ class SignupViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
     permission_classes = (permissions.AllowAny,)
 
     def create(self, request):
-        serializer = self.get_serializer(data=request.data)
-        if User.objects.filter(username=request.data.get('username'),
-                               email=request.data.get('email')).exists():
-            user, created = User.objects.get_or_create(username=request.data.get('username'))
-            if created is False:
-                confirmation_token = default_token_generator.make_token(user)
-                user.confirmation_token = confirmation_token
-                user.save()
-                return Response('Токен пользователя обновлен', status=status.HTTP_200_OK)
+        serializer = SignupSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        serializer.save()
-        user = User.objects.get(username=request.data.get('username'),
-                                email=request.data.get('email'))
-        confirmation_token = default_token_generator.make_token(user)
-        user.confirmation_token = confirmation_token
-
+        username = serializer.validated_data.get('username')
+        email = serializer.validated_data.get('email')
+        # if User.objects.filter(username=username, email=email).exists():
+        #     return data
+        try:
+            user, created = User.objects.get_or_create(username=username, email=email)
+        except Exception:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        confirmation_code = default_token_generator.make_token(user)
+        user.confirmation_code = confirmation_code
+        user.save()
         send_mail(
             subject='Код подтверждения',
-            message=f'Ваш код подтверждения {confirmation_token}',
+            message=f'Ваш код подтверждения {confirmation_code}',
             from_email=None,
             recipient_list=(user.email,),
             fail_silently=False
         )
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(request.data, status=status.HTTP_200_OK)
+
+        # if User.objects.filter(username=request.data.get('username'),
+        #                        email=request.data.get('email')).exists():
+        #     return Response('Пользователь существует', status=status.HTTP_400_BAD_REQUEST)
+        # confirmation_code = default_token_generator.make_token(user)
+        # send_mail(
+        #     subject='Код подтверждения',
+        #     message=f'Ваш код подтверждения {confirmation_code}',
+        #     from_email=None,
+        #     recipient_list=(user.email,),
+        #     fail_silently=False
+        # )
+        # return Response(request.data, status=status.HTTP_200_OK)
+
+    # def create(self, request):
+    #     serializer = self.get_serializer(data=request.data)
+    #     if User.objects.filter(username=request.data.get('username'),
+    #                            email=request.data.get('email')).exists():
+    #         user, created = User.objects.get_or_create(username=request.data.get('username'))
+    #         if created is False:
+    #             confirmation_token = default_token_generator.make_token(user)
+    #             user.confirmation_token = confirmation_token
+    #             user.save()
+    #             return Response('Токен пользователя обновлен', status=status.HTTP_200_OK)
+    #     serializer.is_valid(raise_exception=True)
+    #     serializer.save()
+    #     user = User.objects.get(username=request.data.get('username'),
+    #                             email=request.data.get('email'))
+    #     confirmation_token = default_token_generator.make_token(user)
+    #     user.confirmation_token = confirmation_token
+
+    #     send_mail(
+    #         subject='Код подтверждения',
+    #         message=f'Ваш код подтверждения {confirmation_token}',
+    #         from_email=None,
+    #         recipient_list=(user.email,),
+    #         fail_silently=False
+    #     )
+    #     return Response(serializer.data, status=status.HTTP_200_OK)

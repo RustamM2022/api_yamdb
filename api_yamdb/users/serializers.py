@@ -1,3 +1,4 @@
+from django.forms import ValidationError
 from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
 from django.contrib.auth.hashers import make_password
@@ -30,6 +31,15 @@ class UserSerializer(serializers.ModelSerializer):
             )
         return data
 
+    def validate_password(self, value: str) -> str:
+        """
+        Hash value passed by user.
+
+        :param value: password of a user
+        :return: a hashed version of the password
+        """
+        return make_password(value)
+
 
 class UserMeSerializer(serializers.ModelSerializer):
     role = serializers.CharField(read_only=True)
@@ -47,6 +57,28 @@ class UserMeSerializer(serializers.ModelSerializer):
 
 class SignupSerializer(serializers.ModelSerializer):
 
+    def validate(self, data):
+        username = data.get('username')
+        email = data.get('email')
+        if User.objects.filter(username=username, email=email).exists():
+            return data
+        if User.objects.filter(username=username).exists():
+            raise ValidationError(
+                'Полученный username уже используется другим '
+                'пользователем.')
+        if User.objects.filter(email=email).exists():
+            raise ValidationError(
+                'Полученный email уже используется другим '
+                'пользователем.')
+        if data.get('username') == 'me':
+            raise serializers.ValidationError(
+                'Имя пользователя me недопустимо. Используйте другое имя.')
+        if not re.match(r'^[\w.@+-]+', str(data.get('username'))):
+            raise serializers.ValidationError(
+                "Неверный формат имени."
+            )
+        return data
+
     class Meta:
         fields = ('username', 'email')
         model = User
@@ -56,15 +88,14 @@ class SignupSerializer(serializers.ModelSerializer):
         )
         ]
 
-    def validate(self, data):
-        if data.get('username') == 'me':
-            raise serializers.ValidationError(
-                'Имя пользователя me недопустимо. Используйте другое имя.')
-        if not re.match(r'^[\w.@+-]+', str(data.get('username'))):
-            raise serializers.ValidationError(
-                "Неверный формат имени."
-            )
-        return data
+
+
+
+        # if User.objects.filter(username=username).first() != User.objects.filter(email=email).first():
+        #     raise ValidationError(
+        #         'Полученный email или username уже используется другим '
+        #         'пользователем.')
+
 
 
 # class SignupSerializer(serializers.ModelSerializer):
