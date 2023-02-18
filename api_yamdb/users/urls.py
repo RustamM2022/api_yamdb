@@ -7,7 +7,7 @@ from rest_framework_simplejwt.views import (
     TokenVerifyView,
 )
 
-router = routers.SimpleRouter()
+router = routers.DefaultRouter()
 
 router.register(r'users', UsersViewSet)
 
