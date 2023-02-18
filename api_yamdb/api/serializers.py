@@ -56,7 +56,7 @@ class TitleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Title
         fields = (
-            'name', 'year', 'description', 'genre', 'category')
+            'name', 'year', 'description', 'genre', 'category', 'id')
 
     def to_representation(self, title):
         """Определяет какой сериализатор будет использоваться для чтения."""

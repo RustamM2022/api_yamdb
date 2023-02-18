@@ -1,6 +1,6 @@
 from rest_framework import filters, mixins, viewsets
 
-from .permissions import AnonimReadOnly, IsSuperUserOrIsAdminOnly
+from users.permissions import AnonimReadOnly, IsSuperUserOrIsAdminOnly
 
 
 class CreateListDestroyViewSet(mixins.CreateModelMixin,
