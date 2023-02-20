@@ -23,7 +23,7 @@ class ReviewSerializer(serializers.ModelSerializer):
     )
 
     score = serializers.IntegerField(
-        'Рейтинг',
+        # 'Рейтинг',
         default = '1',
         validators=[
             MinValueValidator(limit_value=1,
