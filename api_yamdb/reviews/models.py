@@ -1,8 +1,7 @@
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from users.models import User
-from django.core.validators import (MaxValueValidator, MinValueValidator,
-                                    RegexValidator)
+from django.core.validators import (RegexValidator)
 from datetime import datetime
 
 
@@ -73,7 +72,8 @@ class Title(models.Model):
 class Review(models.Model):
     text = models.TextField(
         'Текст отзыва',
-        help_text='Введите текст отзыва'
+        help_text='Введите текст отзыва',
+        unique=True
     )
     pub_date = models.DateTimeField('Дата публикации', auto_now_add=True)
     author = models.ForeignKey(
@@ -85,9 +85,9 @@ class Review(models.Model):
         Title,
         on_delete=models.CASCADE,
         verbose_name='Произведение',
+        null=True
     )
     score = models.IntegerField(
-        # 'Рейтинг',
         default='1',
         validators=[
             MinValueValidator(limit_value=1,
@@ -99,6 +99,12 @@ class Review(models.Model):
 
     class Meta:
         ordering = ('pub_date',)
+        constraints = (
+            models.UniqueConstraint(
+                fields=['author', 'title'],
+                name='unique_author_title'
+            ),
+        )
 
     def __str__(self):
         return self.text
@@ -106,7 +112,6 @@ class Review(models.Model):
 
 class Comments(models.Model):
     text = models.TextField(
-        # 'Текст комментария',
         help_text='Введите текст комментария',
         verbose_name='Комментарий'
     )
