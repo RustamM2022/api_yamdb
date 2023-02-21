@@ -1,28 +1,18 @@
 from django.urls import path, include
-from users.views import UsersViewSet, SignupViewSet
+from users.views import UsersViewSet, SignupViewSet, get_token
 from rest_framework import routers
-from rest_framework_simplejwt.views import (
-    TokenObtainPairView,
-    TokenRefreshView,
-    TokenVerifyView,
-)
 
-router = routers.DefaultRouter()
+app_name = 'users'
+
+router = routers.SimpleRouter()
 
 router.register(r'users', UsersViewSet)
 
 urlpatterns = [
     path(
-        'auth/token/', TokenObtainPairView.as_view(),
-        name='token_obtain_pair'),
-    path(
-        'auth/token/refresh/', TokenRefreshView.as_view(),
-        name='token_refresh'),
-    path(
-        'auth/token/verify/', TokenVerifyView.as_view(),
-        name='token_verify'),
-    path(
         'auth/signup/', SignupViewSet.as_view({'post': 'create'}),
         name='signup'),
+    path(
+        'auth/token/', get_token, name='token'),
     path('', include(router.urls))
 ]
