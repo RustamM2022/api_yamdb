@@ -87,7 +87,7 @@ class Review(models.Model):
         verbose_name='Произведение',
     )
     score = models.IntegerField(
-        'Рейтинг',
+        # 'Рейтинг',
         default='1',
         validators=[
             MinValueValidator(limit_value=1,

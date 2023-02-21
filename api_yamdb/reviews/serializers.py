@@ -24,7 +24,7 @@ class ReviewSerializer(serializers.ModelSerializer):
 
     score = serializers.IntegerField(
         # 'Рейтинг',
-        default = '1',
+        default='1',
         validators=[
             MinValueValidator(limit_value=1,
                               message='Минимальный рейтинг - 1'),
