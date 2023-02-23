@@ -2,7 +2,8 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from users.models import User
 from django.core.validators import (RegexValidator)
-from datetime import datetime
+# from datetime import datetime
+from .validators import year_validator
 
 
 class Category(models.Model):
@@ -43,9 +44,9 @@ class Genre(models.Model):
 
 class Title(models.Model):
     name = models.CharField(max_length=256, verbose_name='Название')
-    year = models.IntegerField(
-        validators=[MaxValueValidator(datetime.now().year),
-                    MinValueValidator(0)]
+    year = models.SmallIntegerField(
+        validators=[year_validator],
+        verbose_name='Год создания произведения'
     )
     description = models.TextField(blank=True, null=True)
     genre = models.ManyToManyField(
@@ -132,3 +133,22 @@ class Comments(models.Model):
 
     class Meta:
         ordering = ('pub_date',)
+
+
+class GenreTitle(models.Model):
+    title = models.ForeignKey(
+        Title,
+        on_delete=models.CASCADE,
+        related_name='TT'
+    )
+    genre = models.ForeignKey(
+        Genre,
+        on_delete=models.CASCADE,
+        related_name='GG'
+    )
+
+    def __str__(self):
+        return str(self.id)
+
+    class Meta:
+        ordering = ['id']
