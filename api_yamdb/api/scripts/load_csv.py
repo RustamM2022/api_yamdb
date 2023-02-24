@@ -7,8 +7,6 @@ from reviews.models import Category, Genre, Title, Review, Comments, GenreTitle
 from users.models import User
 
 
-# class Command(BaseCommand):
-
 def run(*args, **options):
     with open(f'{settings.BASE_DIR}/static/data/category.csv') as csv_file:
         reader = csv.DictReader(csv_file)
