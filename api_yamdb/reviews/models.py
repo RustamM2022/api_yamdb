@@ -1,7 +1,8 @@
-from django.core.validators import MaxValueValidator, MinValueValidator
+from django.core.validators import (MaxValueValidator, MinValueValidator,
+                                    RegexValidator)
 from django.db import models
 from users.models import User
-from django.core.validators import (RegexValidator)
+
 # from datetime import datetime
 from .validators import year_validator
 
@@ -88,7 +89,7 @@ class Review(models.Model):
         verbose_name='Произведение',
         null=True
     )
-    score = models.IntegerField(
+    score = models.PositiveSmallIntegerField(
         default='1',
         validators=[
             MinValueValidator(limit_value=1,

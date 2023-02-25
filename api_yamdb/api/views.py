@@ -1,18 +1,14 @@
 from django.db.models import Avg
-from rest_framework import viewsets, filters
-from reviews.models import Category, Genre, Title
 from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import filters, viewsets
+from rest_framework.pagination import PageNumberPagination
+from reviews.models import Category, Genre, Title
+from users.permissions import AnonimReadOnly, IsSuperUserOrIsAdminOnly
 
 from .filters import TitleFilter
 from .mixins import CreateListDestroyViewSet
-from users.permissions import (
-    AnonimReadOnly,
-    IsSuperUserOrIsAdminOnly
-)
-from .serializers import (
-    CategorySerializer, GenreSerializer,
-    TitleGETSerializer, TitleSerializer)
-from rest_framework.pagination import PageNumberPagination
+from .serializers import (CategorySerializer, GenreSerializer,
+                          TitleGETSerializer, TitleSerializer)
 
 
 class CategoryViewSet(CreateListDestroyViewSet):

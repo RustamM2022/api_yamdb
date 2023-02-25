@@ -1,6 +1,6 @@
-from django.urls import path, include
-from users.views import UsersViewSet, SignupViewSet, get_token
+from django.urls import include, path
 from rest_framework import routers
+from users.views import SignupViewSet, UsersViewSet, get_token
 
 app_name = 'users'
 

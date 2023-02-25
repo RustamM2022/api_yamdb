@@ -1,5 +1,4 @@
 from rest_framework import filters, mixins, viewsets
-
 from users.permissions import AnonimReadOnly, IsSuperUserOrIsAdminOnly
 
 

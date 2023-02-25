@@ -1,19 +1,15 @@
-from rest_framework import viewsets
-from .permissions import IsSuperUserOrIsAdminOnly
-from users.models import User
-from rest_framework import mixins
-from rest_framework.decorators import action
-from rest_framework.response import Response
-from .serializers import (
-    UserSerializer, UserMeSerializer, SignupSerializer, TokenSerializer)
-from rest_framework import filters
-from .pagination import PostPagination
-from rest_framework import status
-from rest_framework import permissions
-from django.core.mail import send_mail
 from django.contrib.auth.tokens import default_token_generator
-from rest_framework.decorators import api_view, permission_classes
+from django.core.mail import send_mail
+from rest_framework import filters, mixins, permissions, status, viewsets
+from rest_framework.decorators import action, api_view, permission_classes
+from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
+from users.models import User
+
+from .pagination import PostPagination
+from .permissions import IsSuperUserOrIsAdminOnly
+from .serializers import (SignupSerializer, TokenSerializer, UserMeSerializer,
+                          UserSerializer)
 
 
 class UsersViewSet(

@@ -1,15 +1,16 @@
+import re
+
 from django.forms import ValidationError
 from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
 from users.models import User
-import re
 
 
 class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         fields = (
-            'username', 'email', 'bio', 'first_name', 'last_name', 'role')
+            'username', 'email', 'first_name', 'last_name', 'bio', 'role')
         model = User
         validators = [UniqueTogetherValidator(
             queryset=User.objects.all(),
@@ -44,19 +45,18 @@ class SignupSerializer(serializers.ModelSerializer):
     def validate(self, data):
         username = data.get('username')
         email = data.get('email')
-        if User.objects.filter(username=username, email=email).exists():
-            return data
-        if User.objects.filter(username=username).exists():
+        if User.objects.filter(username__iexact=username).exists():
             raise ValidationError(
                 'Полученный username уже используется другим '
                 'пользователем.')
-        if User.objects.filter(email=email).exists():
+        if User.objects.filter(email__iexact=email).exists():
             raise ValidationError(
                 'Полученный email уже используется другим '
                 'пользователем.')
-        if data.get('username') == 'me':
+        if data.get('username').lower() == 'me':
             raise serializers.ValidationError(
-                'Имя пользователя me недопустимо. Используйте другое имя.')
+                f'Имя пользователя {username} недопустимо. '
+                'Используйте другое имя.')
         if not re.match(r'^[\w.@+-]+', str(data.get('username'))):
             raise serializers.ValidationError(
                 "Неверный формат имени."
