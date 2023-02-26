@@ -22,16 +22,6 @@ class ReviewSerializer(serializers.ModelSerializer):
         slug_field='username'
     )
 
-    score = serializers.IntegerField(
-        default='1',
-        validators=[
-            MinValueValidator(limit_value=1,
-                              message='Минимальный рейтинг - 1'),
-            MaxValueValidator(limit_value=10,
-                              message='Максимальный рейтинг - 10')
-        ],
-    )
-
     class Meta:
         model = Review
         fields = ('id', 'text', 'author', 'pub_date', 'score')
