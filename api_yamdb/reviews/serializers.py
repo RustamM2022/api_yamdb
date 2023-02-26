@@ -1,4 +1,3 @@
-from django.core.validators import MaxValueValidator, MinValueValidator
 from rest_framework import serializers
 
 from .models import Comments, Review
