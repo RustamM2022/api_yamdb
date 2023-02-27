@@ -58,15 +58,15 @@ class SignupViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
             serializer.save()
             user = User.objects.get(username=request.data.get('username'),
                                     email=request.data.get('email'))
-            confirmation_code = default_token_generator.make_token(user)
-            user.confirmation_code = confirmation_code
-            send_mail(
-                subject='Код подтверждения',
-                message=f'Ваш код подтверждения {confirmation_code}',
-                from_email=None,
-                recipient_list=(user.email,),
-                fail_silently=False
-            )
+        confirmation_code = default_token_generator.make_token(user)
+        user.confirmation_code = confirmation_code
+        send_mail(
+            subject='Код подтверждения',
+            message=f'Ваш код подтверждения {confirmation_code}',
+            from_email=None,
+            recipient_list=(user.email,),
+            fail_silently=False
+        )
         return Response(request.data, status=status.HTTP_200_OK)
 
 
